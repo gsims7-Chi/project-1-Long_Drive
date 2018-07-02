@@ -105,7 +105,22 @@ function clearCanvas() {
 
 
 // 3. player animation
+let counter = 0;
+function animateCanvas() {
 
+  // any code here will be executed approx every 1/60th of a second
+  counter ++;
+  console.log("hey animate", counter);
+  
+  clearCanvas();
+  player1.paintPlayer();
+
+
+  // pass this function into w.rAF
+  window.requestAnimationFrame(animateCanvas)
+}
+
+ animateCanvas();
 
 
 
