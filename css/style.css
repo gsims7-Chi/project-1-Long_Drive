@@ -1,11 +1,11 @@
 canvas {
 	background-color: grey;
-	height: 400px;
-	width: 1000px;
+	height: 350px;
+	width: 900px;
 	margin: 0 auto;
 	bottom: 0;
 	position: absolute;
-	position: all;
+	padding-bottom: 10px;
 }
 #align{
 	/*text-align: center;*/
