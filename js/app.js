@@ -1,6 +1,7 @@
 // console.log('we work')
 let counter = 0;
-let handle = 0
+var handle;
+let keepGoing = true;
 
 // 1. make canvas 
 const canvas = document.getElementById('my-canvas')
@@ -121,13 +122,13 @@ const game = {
 	checkCollision() {
 		// using yesterday's discussion 
 		
-		const weHit = false
-		if (player1.x + player1.width >= firstObstacle.x && player1.x < firstObstacle.x + firstObstacle.width && player1.y + player1.height > firstObstacle.y && player1.y < firstObstacle.y + firstObstacle.height)  {
-			console.log("i'm working")
+		// let weHit = false
+		if (player1.x + player1.width >= firstObstacle.x && player1.x < firstObstacle.x + firstObstacle.width && player1.y + player1.height > firstObstacle.y && player1.y < firstObstacle.y + firstObstacle.height === true)  {
+			// console.log("i'm working")
 			
-			return weHit = true
+			return true
 		}
-		return weHit
+		return false
 	}
 };
 
@@ -140,14 +141,14 @@ const game = {
 // console.log(firstObstacle.x)
 // console.log(player1.width)
 
-console.log(player1.x + player1.width > firstObstacle.x)
-console.log(player1.x < firstObstacle.x + firstObstacle.width);
-console.log(player1.y + player1.height > firstObstacle.y);
-console.log(player1.y < firstObstacle.y + firstObstacle.height);
+// console.log(player1.x + player1.width > firstObstacle.x)
+// console.log(player1.x < firstObstacle.x + firstObstacle.width);
+// console.log(player1.y + player1.height > firstObstacle.y);
+// console.log(player1.y > firstObstacle.y + firstObstacle.height);
 
 // 3. player animation
 let theCanvas = canvas.width
-const animateCanvas = () => {
+function animateCanvas()  {
 
   // any code here will be executed approx every 1/60th of a second
   counter ++;
@@ -158,21 +159,28 @@ const animateCanvas = () => {
   // write a function in obstacle class that adjusts position of obstacle downward and call that function here
   firstObstacle.paintObstical();
 
-  if(game.checkCollision === true) {
-  	alert("you've died")
-  	stop()
+  if(game.checkCollision() === true) {
+  	keepGoing = false;
+  	// set some boolean that says whetheter you should keep going
+  	// cancelAnimationFrame(handle)
+  	// // alert("you've died")
+  	// console.log('stop')
+  	// logic to end game
+  	// return
   }
 
 
-  // pass this function into w.rAF
-  handle = window.requestAnimationFrame(animateCanvas)
+  if(keepGoing) {
+	  // pass this function into w.rAF
+  	handle = requestAnimationFrame(animateCanvas)
+  }
 }
 
- animateCanvas();
+animateCanvas();
 
-const stop = () => {
-	window.cancelAnimationFrame(handle)
-}
+// const stop = () => {
+// 	cancelAnimationFrame(handle)
+// }
 
 
 
