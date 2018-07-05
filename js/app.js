@@ -139,20 +139,29 @@ const game = {
 			}
 		}
 	},
-
+	obsManagement(){
+		if(frameCounter > 0 && this.obstacles[0].y < canvas.height) {
+			this.obstacles[0].paintObstical();
+			this.obstacles[0].move();
+		}
+		if(this.obstacles[0].y === canvas.height && this.obstacles[1].y < canvas.height){
+			this.obstacles[1].paintObstical();
+			this.obstacles[1].move();
+		}
+		if (this.obstacles[1].y === canvas.height && this.obstacles[2].y < canvas.height) {
+			this.obstacles[2].paintObstical();
+			this.obstacles[2].move();
+		}
+		if (this.obstacles[2].y === canvas.height){
+			frameCounter = 0;
+			this.posReset()
+		}
+	}
 }
 game.createObs();
 
 
   
-  // for (let i = 0; i < game.obstacles.length; i++) {
-  // 	console.log(game.obstacles[i])
-  // }
-
-	// and maybe move (= change location data)
-
- 
-	// this should be methods on the player object
 
 // 3. player animation section
 let frameCounter = 0; 
@@ -168,14 +177,11 @@ function animateCanvas() {
   player1.paintPlayer();
   // write a function in obstacle class that adjusts position of obstacle downward and call that function here
 
-	game.paintObs();
   // game.moveObs
   // game.randomObstacle(); --> game.paintObs()
 	frameCounter++
 	console.log(frameCounter)
-	game.posReset();
-    game.moveObs();
-
+	game.obsManagement();
 
 		
   // here we check to see if there were any collisions and if so we stop the loop when we see that keep going has turned false
