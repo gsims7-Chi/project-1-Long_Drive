@@ -5,8 +5,7 @@ let keepGoing = true;
 
 // 1. make canvas 
 const canvas = document.getElementById('my-canvas')
-// console.log(canvas.width);
-// console.log(canvas.height);
+console.log(canvas.height)
 const ctx = canvas.getContext('2d')
 // step one done
 
@@ -37,11 +36,11 @@ class Player {
 
 // 4. obstacle shapes -- stationary, based on data in an object.  Should you have an Obstacle class? (porobably so)
 class Obstacle {
-	constructor(){
+	constructor(height, width){
 		this.x = 150;
 		this.y = 0;
-		this.height = 10
-		this.width = 10
+		this.height = height
+		this.width = width
 	}
 	paintObstical(){
 		ctx.beginPath();
@@ -50,16 +49,30 @@ class Obstacle {
 		ctx.fill();
 		ctx.closePath();
 	}
-	move() { // this will get called every 1/60 of a seond
-		// this should chjange this obstacle's y value -- this f will be called by animateCanvas()
+	move() { 
 		this.y++
 		// console.log("i'm moving") This was a check
+	}
+	checkCollision() {
+		// using yesterday's discussion 
+		
+		// let weHit = false
+		if (player1.x + player1.width >= this.x && player1.x < this.x + this.width && player1.y + player1.height > this.y && player1.y < this.y + this.height === true)  {
+			// console.log("i'm working")
+			
+			return true
+		}
+		return false
 	}
 }
 
 
 const player1 = new Player();
-const firstObstacle = new Obstacle()
+const firstObstacle = new Obstacle(10, 10)
+const secondObstacle = new Obstacle(10, 30)
+secondObstacle.x = 30
+const thirdObstacle = new Obstacle(20, 20)
+thirdObstacle.x = 100
 
 document.addEventListener("keydown", (evt) => {
 	// up 38
@@ -100,35 +113,36 @@ document.addEventListener("keydown", (evt) => {
     	console.log("i'm right");
 	}
 	// here every time I press a button it'll clear the canvas and recreate the player
-	clearCanvas();
-	player1.paintPlayer();
-	firstObstacle.paintObstical();
+	// clearCanvas();
+	// player1.paintPlayer();
+	// firstObstacle.paintObstical();
+	// secondObstacle.paintObstical();
+	// thirdObstacle.paintObstical();
 })
 // player1.movement();
-firstObstacle.paintObstical();
-player1.paintPlayer();
+// firstObstacle.paintObstical();
+// secondObstacle.paintObstical();
+// thirdObstacle.paintObstical();
+// player1.paintPlayer();
 
 function clearCanvas() {
   // this will erase the entire canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 };
 const game = {
-	// obstacles: [];
 
 	start() {
-		//create 4 obstacles
+		//create 4 
 			// instantiating a class 4 times and pushing into above array?
 	},
-	checkCollision() {
-		// using yesterday's discussion 
-		
-		// let weHit = false
-		if (player1.x + player1.width >= firstObstacle.x && player1.x < firstObstacle.x + firstObstacle.width && player1.y + player1.height > firstObstacle.y && player1.y < firstObstacle.y + firstObstacle.height === true)  {
-			// console.log("i'm working")
-			
-			return true
-		}
-		return false
+	 obstacles:[firstObstacle, secondObstacle, thirdObstacle],
+
+	 randomObstacle () {
+
+	 	for (let i = 0; i < obstacles.length; i++) {
+	 		Math.floor(Math.random() * obstacles.length - 1)
+	 		[i].paintObstical()
+	 	}
 	}
 };
 
@@ -138,14 +152,6 @@ const game = {
  
 	// this should be methods on the player object
 
-// console.log(firstObstacle.x)
-// console.log(player1.width)
-
-// console.log(player1.x + player1.width > firstObstacle.x)
-// console.log(player1.x < firstObstacle.x + firstObstacle.width);
-// console.log(player1.y + player1.height > firstObstacle.y);
-// console.log(player1.y > firstObstacle.y + firstObstacle.height);
-
 // 3. player animation
 let theCanvas = canvas.width
 function animateCanvas()  {
@@ -154,22 +160,24 @@ function animateCanvas()  {
   counter ++;
   // console.log("hey animate", counter);
   firstObstacle.move()
+  secondObstacle.move();
+	thirdObstacle.move();
   clearCanvas();
   player1.paintPlayer();
   // write a function in obstacle class that adjusts position of obstacle downward and call that function here
   firstObstacle.paintObstical();
-
-  if(game.checkCollision() === true) {
+	secondObstacle.paintObstical();
+	thirdObstacle.paintObstical();
+	// here we check to see if there were any collisions and if so we stop the loop when we see that keep going has turned false
+  if(firstObstacle.checkCollision() === true) {
   	keepGoing = false;
-  	// set some boolean that says whetheter you should keep going
-  	// cancelAnimationFrame(handle)
-  	// // alert("you've died")
-  	// console.log('stop')
-  	// logic to end game
-  	// return
+  }if (secondObstacle.checkCollision() === true) {
+  	keepGoing = false;
+  }if (thirdObstacle.checkCollision() === true) {
+  	keepGoing = false;
   }
 
-
+  // here if there was not a collision we continue
   if(keepGoing) {
 	  // pass this function into w.rAF
   	handle = requestAnimationFrame(animateCanvas)
