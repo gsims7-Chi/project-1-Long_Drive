@@ -1,13 +1,15 @@
+// 1. make canvas 
+// step one done
+const canvas = document.getElementById('my-canvas')
+console.log(canvas.height)
+const ctx = canvas.getContext('2d')
 // console.log('we work')
 let counter = 0;
 var handle;
 let keepGoing = true;
-
-// 1. make canvas 
-const canvas = document.getElementById('my-canvas')
-console.log(canvas.height)
-const ctx = canvas.getContext('2d')
-// step one done
+const random = () => {
+	return Math.floor(Math.random() * canvas.width)
+}
 
 // 2. player shape ---
 
@@ -69,10 +71,11 @@ class Obstacle {
 
 const player1 = new Player();
 const firstObstacle = new Obstacle(10, 10)
+firstObstacle.x = random();
 const secondObstacle = new Obstacle(10, 30)
-secondObstacle.x = 30
+secondObstacle.x = random();
 const thirdObstacle = new Obstacle(20, 20)
-thirdObstacle.x = 100
+thirdObstacle.x = random();
 
 document.addEventListener("keydown", (evt) => {
 	// up 38
@@ -125,21 +128,17 @@ const game = {
 			console.log(this.obstacles[i])
 		}
 	},
-	moveObs() {
-
-		for (let i = 0; i < this.obstacles.length; i++) {
-			this.obstacles[i].move();	
-		}
-	},
 	posReset(){
 
 		for (let i = 0; i < this.obstacles.length; i++) {
 			if (this.obstacles[i].y === canvas.height) {
-				this.obstacles[i].y = 0
+				this.obstacles[i].y = 0;
+				this.obstacles[i].x = random();
 			}
 		}
 	},
 	obsManagement(){
+		
 		if(frameCounter > 0 && this.obstacles[0].y < canvas.height) {
 			this.obstacles[0].paintObstical();
 			this.obstacles[0].move();
@@ -180,7 +179,7 @@ function animateCanvas() {
   // game.moveObs
   // game.randomObstacle(); --> game.paintObs()
 	frameCounter++
-	console.log(frameCounter)
+	// console.log(frameCounter)
 	game.obsManagement();
 
 		
