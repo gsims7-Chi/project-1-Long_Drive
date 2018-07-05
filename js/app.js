@@ -85,11 +85,7 @@ document.addEventListener("keydown", (evt) => {
   	// down 40
   	if(evt.keyCode == 40 && player1.y < 120) {
   	  console.log("i'm down")
-  	  // function animateCanvas() {
-
-		  // any code here will be executed approx every 1/60th of a second
-		  // counter += 1000;
-		  // console.log("hey animate", counter);
+  	  
   	 	 player1.y += 10; // you may want to use a val much higher than 1
 
   	}
@@ -97,14 +93,8 @@ document.addEventListener("keydown", (evt) => {
 		// left 37
   	if(evt.keyCode == 37 && player1.x > 0) {
     	console.log("i'm left")
-    	// setInterval(function() {
+    	
     	player1.x -= 10;
-  //   	if (player1.x === 0){
-  //   		stop();
-  //   	} // you may want to use a val much higher than 1
-		//   clearCanvas();
-		//   player1.paintPlayer();
-		// }, 1000/60);
   	}
 
 		// right 39
@@ -112,79 +102,99 @@ document.addEventListener("keydown", (evt) => {
     	player1.x += 10; // you may want to use a val much higher than 1
     	console.log("i'm right");
 	}
-	// here every time I press a button it'll clear the canvas and recreate the player
-	// clearCanvas();
-	// player1.paintPlayer();
-	// firstObstacle.paintObstical();
-	// secondObstacle.paintObstical();
-	// thirdObstacle.paintObstical();
-})
-// player1.movement();
-// firstObstacle.paintObstical();
-// secondObstacle.paintObstical();
-// thirdObstacle.paintObstical();
-// player1.paintPlayer();
+});
 
 function clearCanvas() {
   // this will erase the entire canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 };
+
 const game = {
+	
+	obstacles: [],
+	// obstacles: [firstObstacle, secondObstacle, thirdObstacle],
 
-	start() {
-		//create 4 
-			// instantiating a class 4 times and pushing into above array?
+	
+	createObs() {
+		this.obstacles.push(firstObstacle, secondObstacle, thirdObstacle);
 	},
-	 obstacles:[firstObstacle, secondObstacle, thirdObstacle],
+	paintObs() {
 
-	 randomObstacle () {
+		for (let i = 0; i < this.obstacles.length; i++) {
+			this.obstacles[i].paintObstical();
+			console.log(this.obstacles[i])
+		}
+	},
+	moveObs() {
 
-	 	for (let i = 0; i < obstacles.length; i++) {
-	 		Math.floor(Math.random() * obstacles.length - 1)
-	 		[i].paintObstical()
-	 	}
-	}
-};
+		for (let i = 0; i < this.obstacles.length; i++) {
+			this.obstacles[i].move();	
+		}
+	},
+	posReset(){
 
+		for (let i = 0; i < this.obstacles.length; i++) {
+			if (this.obstacles[i].y === canvas.height) {
+				this.obstacles[i].y = 0
+			}
+		}
+	},
+
+}
+game.createObs();
+
+
+  
+  // for (let i = 0; i < game.obstacles.length; i++) {
+  // 	console.log(game.obstacles[i])
+  // }
 
 	// and maybe move (= change location data)
 
  
 	// this should be methods on the player object
 
-// 3. player animation
-let theCanvas = canvas.width
-function animateCanvas()  {
+// 3. player animation section
+let frameCounter = 0; 
+
+
+function animateCanvas() {
 
   // any code here will be executed approx every 1/60th of a second
-  counter ++;
+  // counter ++;
   // console.log("hey animate", counter);
-  firstObstacle.move()
-  secondObstacle.move();
-	thirdObstacle.move();
+  
   clearCanvas();
   player1.paintPlayer();
   // write a function in obstacle class that adjusts position of obstacle downward and call that function here
-  firstObstacle.paintObstical();
-	secondObstacle.paintObstical();
-	thirdObstacle.paintObstical();
-	// here we check to see if there were any collisions and if so we stop the loop when we see that keep going has turned false
-  if(firstObstacle.checkCollision() === true) {
-  	keepGoing = false;
-  }if (secondObstacle.checkCollision() === true) {
-  	keepGoing = false;
-  }if (thirdObstacle.checkCollision() === true) {
-  	keepGoing = false;
-  }
 
-  // here if there was not a collision we continue
-  if(keepGoing) {
-	  // pass this function into w.rAF
-  	handle = requestAnimationFrame(animateCanvas)
-  }
+	game.paintObs();
+  // game.moveObs
+  // game.randomObstacle(); --> game.paintObs()
+	frameCounter++
+	console.log(frameCounter)
+	game.posReset();
+    game.moveObs();
+
+
+		
+  // here we check to see if there were any collisions and if so we stop the loop when we see that keep going has turned false
+
+  for (let i = 0; i < game.obstacles.length; i++) {
+  	  // console.log(game.[i])
+	  if ( game.obstacles[i].checkCollision() === true) {
+	  	keepGoing = false;
+	  }
+
+  	}
+	// here if there was not a collision we continue
+	if(keepGoing) {
+		// pass this function into w.rAF
+		handle = requestAnimationFrame(animateCanvas)
+	}
 }
 
-animateCanvas();
+animateCanvas()
 
 // const stop = () => {
 // 	cancelAnimationFrame(handle)
