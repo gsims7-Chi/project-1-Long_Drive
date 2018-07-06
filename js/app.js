@@ -204,10 +204,9 @@ function animateCanvas() {
   	  // console.log(game.[i])
 	  if ( game.obstacles[i].checkCollision() === true) {
 	  	keepGoing = false;
-	  	alert('You crashed')
+	  	alert('You crashed. score: ' + frameCounter + '!')
 	  	$('body').append(`<button id="restart">Try again?</button>`);
 	  	$('button').on('click', () => {
-	  		console.log('we work')
 	  		keepGoing = true
 	  		player1.x = 125;
 	  		player1.y = 120;
