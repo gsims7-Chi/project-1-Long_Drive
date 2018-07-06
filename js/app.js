@@ -213,6 +213,7 @@ function animateCanvas() {
 	  		game.posReset();
 	  		game.getNextObst();
 	  		$('button').remove()
+	  		frameCounter = 0
 	  		animateCanvas();
 
 	  	})
