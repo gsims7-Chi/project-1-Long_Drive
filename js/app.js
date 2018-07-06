@@ -12,7 +12,8 @@ const random = () => {
 }
 
 // 2. player shape ---
-
+let playerImage = new Image();
+playerImage.src = "https://s3.envato.com/files/144775074/Aston-Martin_ONE77_10.png";
 // start with player class
 class Player {
 	constructor() {
@@ -20,7 +21,8 @@ class Player {
 		this.x = 125;
 		this.y = 120;
 		this.height = 20;
-		this.width = 30
+		this.width = 30;
+		this.image = playerImage;
 	}
 	// player has a method to draw itself 
 	paintPlayer(){
@@ -32,7 +34,7 @@ class Player {
 	}
 	// 3. player movement
 	movement(){
-
+	 this.x++
 	}
 }
 
@@ -43,6 +45,7 @@ class Obstacle {
 		this.y = 0;
 		this.height = height
 		this.width = width
+		// this.image = obstacleImage;
 	}
 	paintObstical(){
 		ctx.beginPath();
@@ -59,7 +62,7 @@ class Obstacle {
 		// using yesterday's discussion 
 		
 		// let weHit = false
-		if (player1.x + player1.width >= this.x && player1.x < this.x + this.width && player1.y + player1.height > this.y && player1.y < this.y + this.height === true)  {
+		if (player1.x + player1.width >= this.x && player1.x < this.x + this.width && player1.y + player1.height > this.y && player1.y < this.y + this.height)  {
 			// console.log("i'm working")
 			
 			return true
@@ -112,12 +115,15 @@ function clearCanvas() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 };
 
+
+
 const game = {
 	
 	obstacles: [],
 	// obstacles: [firstObstacle, secondObstacle, thirdObstacle],
 
-	
+	currentObstacle: {},
+
 	createObs() {
 		this.obstacles.push(firstObstacle, secondObstacle, thirdObstacle);
 	},
@@ -138,27 +144,34 @@ const game = {
 		}
 	},
 	obsManagement(){
-		
-		if(frameCounter > 0 && this.obstacles[0].y < canvas.height) {
-			this.obstacles[0].paintObstical();
-			this.obstacles[0].move();
+		this.currentObstacle.paintObstical();
+		this.currentObstacle.move();
+		if(this.currentObstacle.y === canvas.height){
+			this.getNextObst();
+			this.posReset();
 		}
-		if(this.obstacles[0].y === canvas.height && this.obstacles[1].y < canvas.height){
-			this.obstacles[1].paintObstical();
-			this.obstacles[1].move();
-		}
-		if (this.obstacles[1].y === canvas.height && this.obstacles[2].y < canvas.height) {
-			this.obstacles[2].paintObstical();
-			this.obstacles[2].move();
-		}
-		if (this.obstacles[2].y === canvas.height){
-			frameCounter = 0;
-			this.posReset()
-		}
-	}
-}
-game.createObs();
+	},
 
+	getNextObst() {
+		let random = Math.floor(Math.random() * this.obstacles.length)
+		// chose rand obs from obstacles[] -- use rn bt 1 and 3
+		if(random === 0){
+			this.currentObstacle = this.obstacles[0]
+		}
+		if(random === 1){
+			this.currentObstacle = this.obstacles[1]
+		}
+		if(random === 2){
+			this.currentObstacle = this.obstacles[2]
+		}
+		// make this.currentObs point to that one 
+	}
+
+}
+
+game.createObs();
+game.getNextObst();
+// call get next obstacle here <------- TODO NOW ASAP FRIST THING RIGHT AWAY
 
   
 
@@ -174,6 +187,8 @@ function animateCanvas() {
   
   clearCanvas();
   player1.paintPlayer();
+  // player1.movement();
+  ctx.drawImage(playerImage, player1.x, player1.y, player1.height, player1.width)
   // write a function in obstacle class that adjusts position of obstacle downward and call that function here
 
   // game.moveObs
@@ -189,6 +204,19 @@ function animateCanvas() {
   	  // console.log(game.[i])
 	  if ( game.obstacles[i].checkCollision() === true) {
 	  	keepGoing = false;
+	  	alert('You crashed')
+	  	$('body').append(`<button id="restart">Try again?</button>`);
+	  	$('button').on('click', () => {
+	  		console.log('we work')
+	  		keepGoing = true
+	  		player1.x = 125;
+	  		player1.y = 120;
+	  		game.posReset();
+	  		game.getNextObst();
+	  		$('button').remove()
+	  		animateCanvas();
+
+	  	})
 	  }
 
   	}
