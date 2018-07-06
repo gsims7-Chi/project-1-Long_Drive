@@ -55,7 +55,7 @@ class Obstacle {
 		ctx.closePath();
 	}
 	move() { 
-		this.y++
+		this.y += 5
 		// console.log("i'm moving") This was a check
 	}
 	checkCollision() {
